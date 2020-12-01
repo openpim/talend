@@ -84,7 +84,7 @@ public class OutputProcessor implements Serializable {
         	searchClient.base(configuration.getDatastore().getUrl().toString());
 			token = Utils.getToken(configuration, searchClient);
 			
-			JsonObject json = Utils.getJson(searchClient.post("application/graphql", token, "query { getLanguages { identifier } }"));
+			JsonObject json = Utils.getJson(searchClient.post("application/json", token, Utils.wrapRequest("query { getLanguages { identifier } }")));
 			JsonArray arr = json.getJsonObject("data").getJsonArray("getLanguages");
 			langs = arr.getValuesAs((JsonObject v) -> v.getString("identifier"));		
         }
@@ -525,7 +525,7 @@ public class OutputProcessor implements Serializable {
 			System.out.println("Sending import request: " + req);
 		}
 		
-		Response<JsonObject> response = searchClient.post("application/graphql", token, req);
+		Response<JsonObject> response = searchClient.post("application/json", token, Utils.wrapRequest(req));
 		JsonObject result = Utils.getJson(response);
 		
 		if (configuration.getDebugOutput()) {

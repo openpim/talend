@@ -31,7 +31,7 @@ public class MyBufferizedProducerSupport extends BufferizedProducerSupport<JsonV
 				if (config.getDataset().getDebugOutput()) {
 					System.out.println("Sending request: " + query);
 				}
-				Response<JsonObject> response = searchClient.post("application/graphql", token, query);
+				Response<JsonObject> response = searchClient.post("application/json", token, Utils.wrapRequest(query));
 				JsonObject result = Utils.getJson(response);
 				
 				if (config.getDataset().getDebugOutput()) {

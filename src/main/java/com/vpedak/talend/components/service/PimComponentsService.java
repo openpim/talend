@@ -19,7 +19,7 @@ public class PimComponentsService {
     			"	  token\n" + 
     			"}}";
     	searchClient.base(datastore.getUrl().toString());
-    	Response<JsonObject> response = searchClient.auth("application/graphql", request);
+    	Response<JsonObject> response = searchClient.auth("application/json", request);
 		if (response.status() == 200) {
 			return new HealthCheckStatus(HealthCheckStatus.Status.OK, "OK");
 		} else {

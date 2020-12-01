@@ -37,7 +37,7 @@ public class InputGuessSchemaHelper {
 	private void init() {
 		token = Utils.getToken(config, searchClient);
 		
-		JsonObject json = Utils.getJson(searchClient.post("application/graphql", token, "query { getLanguages { identifier } }"));
+		JsonObject json = Utils.getJson(searchClient.post("application/json", token, Utils.wrapRequest("query { getLanguages { identifier } }")));
 		JsonArray arr = json.getJsonObject("data").getJsonArray("getLanguages");
 		langs = arr.getValuesAs((JsonObject v) -> v.getString("identifier"));
 		
@@ -61,7 +61,7 @@ public class InputGuessSchemaHelper {
 					"            }\r\n" + 
 					"        }\r\n" + 
 					"    }}}";
-			json = Utils.getJson(searchClient.post("application/graphql", token, attrQuery));
+			json = Utils.getJson(searchClient.post("application/json", token, Utils.wrapRequest(attrQuery)));
 			arr = json.getJsonObject("data").getJsonObject("search").getJsonArray("responses").get(0).asJsonObject().getJsonArray("rows");
 			attrs = arr.getValuesAs((JsonObject v) -> 
 				new Attribute(v.getString("identifier"), 

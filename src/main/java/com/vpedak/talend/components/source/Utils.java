@@ -16,7 +16,7 @@ public class Utils {
 		if (config.getDebugOutput()) {
 			System.out.println("Sending auth request: " + request);
 		}
-		Response<JsonObject> response = searchClient.auth("application/graphql", request);
+		Response<JsonObject> response = searchClient.auth("application/json", wrapRequest(request));
 		JsonObject json = getJson(response);
 		if (config.getDebugOutput()) {
 			System.out.println("Received response: " + json);
@@ -29,6 +29,10 @@ public class Utils {
 		}
 		
 		return token;
+	}
+	
+	public static String wrapRequest(String request) {
+		return "{\"query\":\""+request.replace("\"","\\\"").replace("\n", "\\n").replace("\t", "\\t")+"\"}";
 	}
 	
 	public static JsonObject getJson(Response<JsonObject> response) {
