@@ -144,9 +144,11 @@ public class PIMInputSource implements Serializable {
 		if (value.getValueType() == ValueType.STRING) {
 			builder.withString(key, ((JsonString)value).getString());
 		} else if (value.getValueType() == ValueType.TRUE) {
-			builder.withBoolean(key, true);
+			// builder.withBoolean(key, true);
+			builder.withString(key, "true");
 		} else if (value.getValueType() == ValueType.FALSE) {
-			builder.withBoolean(key, false);
+			// builder.withBoolean(key, false);
+			builder.withString(key, "false");
 		} else if (value.getValueType() == ValueType.OBJECT) {
 			builder.withString(key, dumpObject(value.asJsonObject()));
 		} else if (value.getValueType() == ValueType.NUMBER) {
