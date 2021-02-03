@@ -46,6 +46,21 @@
 	  <artifactId>httpmime</artifactId>
 	  <version>4.5.12</version>
 	</dependency>    
+	<dependency>
+	    <groupId>com.github.doraig</groupId>
+	    <artifactId>jcef</artifactId>
+	    <version>78.1-win64</version>
+	</dependency>
+        <dependency>
+            <groupId>org.jogamp.jogl</groupId>
+            <artifactId>jogl-all</artifactId>
+            <version>2.3.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jogamp.gluegen</groupId>
+            <artifactId>gluegen-rt</artifactId>
+            <version>2.3.2</version>
+        </dependency>
   </dependencies>
 
   <build>
