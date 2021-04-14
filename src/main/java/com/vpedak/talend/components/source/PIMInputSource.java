@@ -141,7 +141,9 @@ public class PIMInputSource implements Serializable {
 	}
 
 	private void buildValue(Record.Builder builder, String key, JsonValue value) {
-		if (value.getValueType() == ValueType.STRING) {
+		if (value.getValueType() == ValueType.NULL) {
+			builder.withString(key, null);
+		} else if (value.getValueType() == ValueType.STRING) {
 			builder.withString(key, ((JsonString)value).getString());
 		} else if (value.getValueType() == ValueType.TRUE) {
 			// builder.withBoolean(key, true);
