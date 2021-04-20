@@ -212,6 +212,7 @@ public class MyBufferizedProducerSupport extends BufferizedProducerSupport<JsonV
 		"			  lov\n" + 
 		"			  richText\n" + 
 		"			  multiLine\n" + 
+		"			  options\n" + 
 		"			  createdBy\n" + 
 		"			  createdAt\n" + 
 		"			  updatedBy\n" + 

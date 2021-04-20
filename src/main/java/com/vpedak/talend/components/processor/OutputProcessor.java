@@ -384,6 +384,7 @@ public class OutputProcessor implements Serializable {
 			if (name.equals("lov")) appendValue(list, "lov", entry, record);
 			if (name.equals("richText")) appendValue(list, "richText", entry, record);
 			if (name.equals("multiLine")) appendValue(list, "multiLine", entry, record);
+			if (name.equals("options")) appendValue(list, "options", entry, record);
 			if (name.startsWith("name_")) {
 				String lang = name.substring(5);
 				appendValue(nameValues, lang, entry, record);
@@ -450,6 +451,7 @@ public class OutputProcessor implements Serializable {
     			!name.equals("values") && 
     			!name.equals("images") && 
     			!name.equals("errorMessage") && 
+    			!name.equals("options") && 
     			!name.equals("relations")) {
     		sb.append("\"\"\"");
     		encode = true;
@@ -498,6 +500,7 @@ public class OutputProcessor implements Serializable {
     			!name.equals("values") && 
     			!name.equals("images") && 
     			!name.equals("errorMessage") && 
+    			!name.equals("options") && 
     			!name.equals("relations")) {
     		sb.append("\"\"\",\n");
     	} else {
