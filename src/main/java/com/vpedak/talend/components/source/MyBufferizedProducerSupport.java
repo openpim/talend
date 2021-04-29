@@ -129,7 +129,7 @@ public class MyBufferizedProducerSupport extends BufferizedProducerSupport<JsonV
 	}
 	
 	private static String itemFields() {
-		return 	"        ... on ItemsResponse {\n" + 
+		return 	"        ... on ItemsSearchResponse {\n" + 
 				"            count\n" + 
 				"            rows {\n" +
 				"			  id\n" + 
