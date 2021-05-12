@@ -26,6 +26,7 @@ import com.vpedak.talend.components.source.InputGuessSchemaHelper;
 import com.vpedak.talend.components.source.PIMInputMapperConfiguration;
 import com.vpedak.talend.components.source.PIMInputSource;
 import com.vpedak.talend.components.source.SearchClient;
+import com.vpedak.talend.components.source.Utils;
 
 @Version(1) // default version is 1, if some configuration changes happen between 2 versions you can add a migrationHandler
 @Icon(value = CUSTOM, custom = "PIMRowInput") // icon is located at src/main/resources/icons/PIMRowInput.svg
@@ -57,7 +58,7 @@ public class RowInputProcessor implements Serializable {
         	}
         }
         
-        searchClient.base(configuration.getDataset().getDatastore().getUrl().toString()); 
+        searchClient.base(Utils.prepareUrl(configuration.getDataset().getDatastore().getUrl().toString())); 
     }
 
     @PostConstruct

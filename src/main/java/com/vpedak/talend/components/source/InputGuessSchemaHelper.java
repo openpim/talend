@@ -156,8 +156,7 @@ public class InputGuessSchemaHelper {
 		builder.withString("targetId", "");
 		builder.withString("targetIdentifier", "");
 		
-		// values
-		// do we need this ??? buildValues(langs, builder);
+		buildValues(langs, builder);
 		
 		record = builder.build();
 	}
@@ -232,13 +231,13 @@ public class InputGuessSchemaHelper {
 		builder.withString("mimeType", "");
 		builder.withString("fileOrigName", "");
 		
-		// values
-		// do we need this ??? buildValues(langs, builder);
+		buildValues(langs, builder);
 		
 		record = builder.build();
 	}
 
 	private void buildValues(List<String> langs, Record.Builder builder) {
+		int idx = 1;
 		for (Attribute attr : attrs) {
 			if (attr.itemValues) {
 				if (attr.languageDependent) {
@@ -246,6 +245,8 @@ public class InputGuessSchemaHelper {
 				} else {
 					builder.withString("attr_"+attr.identifier, "");
 				}
+				
+				if (idx++ > 2) break;
 			}
 		}
 	}

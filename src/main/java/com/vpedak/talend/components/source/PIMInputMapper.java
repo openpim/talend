@@ -46,7 +46,7 @@ public class PIMInputMapper implements Serializable {
 
     @PostConstruct
     public void init() {
-        searchClient.base(configuration.getDataset().getDatastore().getUrl().toString()); 
+        searchClient.base(Utils.prepareUrl(configuration.getDataset().getDatastore().getUrl().toString())); 
     }
     
     @Assessor

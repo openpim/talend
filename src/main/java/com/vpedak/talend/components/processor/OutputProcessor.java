@@ -81,7 +81,7 @@ public class OutputProcessor implements Serializable {
         if (isGuessSchema) {
         	schemaHelper = new OutputGuessSchemaHelper(builderFactory);
         } else {
-        	searchClient.base(configuration.getDatastore().getUrl().toString());
+        	searchClient.base(Utils.prepareUrl(configuration.getDatastore().getUrl().toString()));
 			token = Utils.getToken(configuration, searchClient);
 			
 			JsonObject json = Utils.getJson(searchClient.post("application/json", token, Utils.wrapRequest("query { getLanguages { identifier } }")));

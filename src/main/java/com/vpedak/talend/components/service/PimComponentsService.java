@@ -1,6 +1,8 @@
 package com.vpedak.talend.components.service;
 
 import javax.json.JsonObject;
+import com.vpedak.talend.components.source.Utils;
+
 
 import org.talend.sdk.component.api.service.Service;
 import org.talend.sdk.component.api.service.healthcheck.HealthCheck;
@@ -18,7 +20,7 @@ public class PimComponentsService {
     	String request = "mutation {signIn(login: \"" + datastore.getUsername() + "\", password: \"" + datastore.getPassword() + "\") {\n" + 
     			"	  token\n" + 
     			"}}";
-    	searchClient.base(datastore.getUrl().toString());
+    	searchClient.base(Utils.prepareUrl(datastore.getUrl().toString()));
     	Response<JsonObject> response = searchClient.auth("application/json", request);
 		if (response.status() == 200) {
 			return new HealthCheckStatus(HealthCheckStatus.Status.OK, "OK");

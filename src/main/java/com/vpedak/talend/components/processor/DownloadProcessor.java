@@ -66,7 +66,7 @@ public class DownloadProcessor implements Serializable {
         if (isGuessSchema) {
         	schemaHelper = new OutputGuessSchemaHelper(builderFactory, true);
         } else {
-        	searchClient.base(configuration.getDatastore().getUrl().toString());
+        	searchClient.base(Utils.prepareUrl(configuration.getDatastore().getUrl().toString()));
 			token = Utils.getToken(configuration, searchClient);
         }
     }

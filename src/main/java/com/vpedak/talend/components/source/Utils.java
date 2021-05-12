@@ -32,7 +32,7 @@ public class Utils {
 	}
 	
 	public static String wrapRequest(String request) {
-		return "{\"query\":\""+request.replace("\"","\\\"").replace("\n", "\\n").replace("\t", "\\t")+"\"}";
+		return "{\"query\":\""+request.replace("\"","\\\"").replace("\r", "").replace("\n", "").replace("\t", " ")+"\"}";
 	}
 	
 	public static JsonObject getJson(Response<JsonObject> response) {
@@ -43,4 +43,11 @@ public class Utils {
 		throw new RuntimeException(response.error(String.class));
 	}
 	
+	public static String prepareUrl(String url) {
+		if (url.endsWith("/")) {
+			return url.substring(0, url.length()-1);
+		} else {
+			return url;
+		}
+	}
 }
