@@ -186,7 +186,9 @@ public class OutputProcessor implements Serializable {
     	Schema schema = record.getSchema();
     	StringBuilder nameValues = new StringBuilder("{");
     	StringBuilder values = new StringBuilder("{");
+    	StringBuilder channels = new StringBuilder("{");
     	Map<String, StringBuilder> langAttributes = new HashMap<String, StringBuilder>();
+    	Map<String, StringBuilder> channelValues = new HashMap<String, StringBuilder>();
 		for (Entry entry : schema.getEntries()) {
 			String name = entry.getName();
 			if (name.equals("identifier")) appendValue(list, "identifier", entry, record);
@@ -218,6 +220,23 @@ public class OutputProcessor implements Serializable {
 					}
 				}
 			}
+			if (name.startsWith("channel_")) {
+				String tmp = name.substring(8);
+				int pos = tmp.lastIndexOf('_');
+				if (pos != -1) {
+					String channelIdentifier = tmp.substring(0, pos);
+					String field = tmp.substring(pos+1);
+					StringBuilder sb = channelValues.get(channelIdentifier);
+					if (sb == null) {
+						sb = new StringBuilder("{");
+						channelValues.put(channelIdentifier, sb);
+					}
+					
+					if (field.equals("status") || field.equals("message")) {
+						appendValue(sb, field, entry, record);
+					}
+				}
+			}
 		}
 		
 		if (nameValues.length() > 1) {
@@ -232,6 +251,15 @@ public class OutputProcessor implements Serializable {
 			}
 			values.append("}");
 			list.append("values: ").append(values.toString());
+		}
+
+		if (channelValues.size() > 0) {
+			for (Map.Entry<String, StringBuilder> mapEntry: channelValues.entrySet()) {
+				mapEntry.getValue().append("}");
+				channels.append(mapEntry.getKey()).append(": ").append(mapEntry.getValue()).append(",");
+			}
+			channels.append("}");
+			list.append("channels: ").append(channels.toString());
 		}
 		
     	list.append("},");
