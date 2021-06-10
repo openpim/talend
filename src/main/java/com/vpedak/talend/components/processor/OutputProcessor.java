@@ -4,6 +4,7 @@ import static org.talend.sdk.component.api.component.Icon.IconType.CUSTOM;
 
 import java.io.Serializable;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -29,6 +30,7 @@ import org.talend.sdk.component.api.processor.OutputEmitter;
 import org.talend.sdk.component.api.processor.Processor;
 import org.talend.sdk.component.api.record.Record;
 import org.talend.sdk.component.api.record.Schema;
+import org.talend.sdk.component.api.record.Record.Builder;
 import org.talend.sdk.component.api.record.Schema.Entry;
 import org.talend.sdk.component.api.record.Schema.Type;
 import org.talend.sdk.component.api.service.http.Response;
@@ -57,6 +59,7 @@ public class OutputProcessor implements Serializable {
 	private StringBuilder request;
 	private StringBuilder list;
 	private List<String> langs;
+	private List<Record> records = new LinkedList<Record>();
 
     public OutputProcessor(@Option("configuration") final OutputProcessorConfiguration configuration,
     		final RecordBuilderFactory builderFactory,
@@ -136,6 +139,7 @@ public class OutputProcessor implements Serializable {
     		defaultOutput.emit(rec);
     		REJECTOutput.emit(rec);
     	} else {
+    		records.add(defaultInput);
     		this.defaultOutput = defaultOutput;
     		this.REJECTOutput = REJECTOutput;
         	if (configuration.getEntity() == EntityEnum.ITEM) {
@@ -564,10 +568,13 @@ public class OutputProcessor implements Serializable {
 		}
 		
 		JsonArray arr = result.getJsonObject("data").getJsonObject("import").getJsonArray(getEntity(configuration));
+		int idx = 0;
 		for (JsonValue data : arr) {
 			JsonObject obj = data.asJsonObject();
 			
 			Record.Builder builder = builderFactory.newRecordBuilder();
+			copyRecord(records.get(idx++), builder);
+			
 			builder.withString("id", obj.getString("id"));
 			builder.withString("identifier", obj.getString("identifier"));
 			builder.withString("result", obj.getString("result"));
@@ -586,5 +593,27 @@ public class OutputProcessor implements Serializable {
 				defaultOutput.emit(record);
 			}
 		}
+		
+		records.clear();
     }
+	
+	private void copyRecord(Record source, Builder builder) {
+		Schema schema = source.getSchema();
+		for (Schema.Entry entry : schema.getEntries()) {
+			if (entry.getType() == Type.STRING) {
+				source.getOptionalString(entry.getName()).ifPresent(v -> builder.withString(entry.getName(), v));
+			} else if (entry.getType() == Type.INT) {
+				source.getOptionalInt(entry.getName()).ifPresent(v -> builder.withInt(entry.getName(), v));
+			} else if (entry.getType() == Type.LONG) {
+				source.getOptionalLong(entry.getName()).ifPresent(v -> builder.withLong(entry.getName(), v));
+			} else if (entry.getType() == Type.FLOAT) {
+				source.getOptionalFloat(entry.getName()).ifPresent(v -> builder.withDouble(entry.getName(), v));
+			} else if (entry.getType() == Type.DOUBLE) {
+				source.getOptionalDouble(entry.getName()).ifPresent(v -> builder.withDouble(entry.getName(), v));
+			} else if (entry.getType() == Type.BOOLEAN) {
+				source.getOptionalBoolean(entry.getName()).ifPresent(v -> builder.withBoolean(entry.getName(), v));
+			}
+		}
+	}
+	
 }
