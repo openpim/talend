@@ -573,7 +573,7 @@ public class OutputProcessor implements Serializable {
 			JsonObject obj = data.asJsonObject();
 			
 			Record.Builder builder = builderFactory.newRecordBuilder();
-			copyRecord(records.get(idx++), builder);
+			Utils.copyRecord(records.get(idx++), builder);
 			
 			builder.withString("id", obj.getString("id"));
 			builder.withString("identifier", obj.getString("identifier"));
@@ -596,24 +596,5 @@ public class OutputProcessor implements Serializable {
 		
 		records.clear();
     }
-	
-	private void copyRecord(Record source, Builder builder) {
-		Schema schema = source.getSchema();
-		for (Schema.Entry entry : schema.getEntries()) {
-			if (entry.getType() == Type.STRING) {
-				source.getOptionalString(entry.getName()).ifPresent(v -> builder.withString(entry.getName(), v));
-			} else if (entry.getType() == Type.INT) {
-				source.getOptionalInt(entry.getName()).ifPresent(v -> builder.withInt(entry.getName(), v));
-			} else if (entry.getType() == Type.LONG) {
-				source.getOptionalLong(entry.getName()).ifPresent(v -> builder.withLong(entry.getName(), v));
-			} else if (entry.getType() == Type.FLOAT) {
-				source.getOptionalFloat(entry.getName()).ifPresent(v -> builder.withDouble(entry.getName(), v));
-			} else if (entry.getType() == Type.DOUBLE) {
-				source.getOptionalDouble(entry.getName()).ifPresent(v -> builder.withDouble(entry.getName(), v));
-			} else if (entry.getType() == Type.BOOLEAN) {
-				source.getOptionalBoolean(entry.getName()).ifPresent(v -> builder.withBoolean(entry.getName(), v));
-			}
-		}
-	}
 	
 }

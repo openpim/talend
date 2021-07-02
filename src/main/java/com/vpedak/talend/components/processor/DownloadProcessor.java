@@ -86,6 +86,7 @@ public class DownloadProcessor implements Serializable {
     		REJECTOutput.emit(rec);
     	} else {
     		Record.Builder builder = builderFactory.newRecordBuilder();
+			Utils.copyRecord(in, builder);
 			builder.withString("result", "ERROR");
 
     		String id = in.getString("id");

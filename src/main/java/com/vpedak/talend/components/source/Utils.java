@@ -2,6 +2,10 @@ package com.vpedak.talend.components.source;
 
 import javax.json.JsonObject;
 
+import org.talend.sdk.component.api.record.Record;
+import org.talend.sdk.component.api.record.Schema;
+import org.talend.sdk.component.api.record.Record.Builder;
+import org.talend.sdk.component.api.record.Schema.Type;
 import org.talend.sdk.component.api.service.http.Response;
 
 import com.vpedak.talend.components.dataset.InputDataset;
@@ -50,4 +54,24 @@ public class Utils {
 			return url;
 		}
 	}
+	
+	public static void copyRecord(Record source, Builder builder) {
+		Schema schema = source.getSchema();
+		for (Schema.Entry entry : schema.getEntries()) {
+			if (entry.getType() == Type.STRING) {
+				source.getOptionalString(entry.getName()).ifPresent(v -> builder.withString(entry.getName(), v));
+			} else if (entry.getType() == Type.INT) {
+				source.getOptionalInt(entry.getName()).ifPresent(v -> builder.withInt(entry.getName(), v));
+			} else if (entry.getType() == Type.LONG) {
+				source.getOptionalLong(entry.getName()).ifPresent(v -> builder.withLong(entry.getName(), v));
+			} else if (entry.getType() == Type.FLOAT) {
+				source.getOptionalFloat(entry.getName()).ifPresent(v -> builder.withDouble(entry.getName(), v));
+			} else if (entry.getType() == Type.DOUBLE) {
+				source.getOptionalDouble(entry.getName()).ifPresent(v -> builder.withDouble(entry.getName(), v));
+			} else if (entry.getType() == Type.BOOLEAN) {
+				source.getOptionalBoolean(entry.getName()).ifPresent(v -> builder.withBoolean(entry.getName(), v));
+			}
+		}
+	}
+	
 }

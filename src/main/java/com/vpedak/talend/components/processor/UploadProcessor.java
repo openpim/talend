@@ -8,6 +8,8 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -25,6 +27,9 @@ import org.talend.sdk.component.api.processor.Output;
 import org.talend.sdk.component.api.processor.OutputEmitter;
 import org.talend.sdk.component.api.processor.Processor;
 import org.talend.sdk.component.api.record.Record;
+import org.talend.sdk.component.api.record.Schema;
+import org.talend.sdk.component.api.record.Record.Builder;
+import org.talend.sdk.component.api.record.Schema.Type;
 import org.talend.sdk.component.api.service.http.Response;
 import org.talend.sdk.component.api.service.record.RecordBuilderFactory;
 
@@ -86,6 +91,7 @@ public class UploadProcessor implements Serializable {
     		REJECTOutput.emit(rec);
     	} else {
     		Record.Builder builder = builderFactory.newRecordBuilder();
+			Utils.copyRecord(in, builder);
 			builder.withString("result", "ERROR");
 
     		String id = in.getString("id");
@@ -144,4 +150,5 @@ public class UploadProcessor implements Serializable {
 	@AfterGroup
     public void afterGroup() {
     }
+	
 }

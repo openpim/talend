@@ -85,7 +85,7 @@ public class PIMInputSource implements Serializable {
 	private Record buildRecord(JsonObject json, InputDataset dataset) {
 		Record.Builder builder = builderFactory.newRecordBuilder();
 		if (initRecord != null) {
-			copyRecord(initRecord, builder);
+			Utils.copyRecord(initRecord, builder);
 		}
 
 		for (Entry<String, JsonValue> entry : json.entrySet()) {
@@ -121,25 +121,6 @@ public class PIMInputSource implements Serializable {
 		return builder.build();
 	}
 	
-	private void copyRecord(Record source, Builder builder) {
-		Schema schema = source.getSchema();
-		for (Schema.Entry entry : schema.getEntries()) {
-			if (entry.getType() == Type.STRING) {
-				source.getOptionalString(entry.getName()).ifPresent(v -> builder.withString(entry.getName(), v));
-			} else if (entry.getType() == Type.INT) {
-				source.getOptionalInt(entry.getName()).ifPresent(v -> builder.withInt(entry.getName(), v));
-			} else if (entry.getType() == Type.LONG) {
-				source.getOptionalLong(entry.getName()).ifPresent(v -> builder.withLong(entry.getName(), v));
-			} else if (entry.getType() == Type.FLOAT) {
-				source.getOptionalFloat(entry.getName()).ifPresent(v -> builder.withDouble(entry.getName(), v));
-			} else if (entry.getType() == Type.DOUBLE) {
-				source.getOptionalDouble(entry.getName()).ifPresent(v -> builder.withDouble(entry.getName(), v));
-			} else if (entry.getType() == Type.BOOLEAN) {
-				source.getOptionalBoolean(entry.getName()).ifPresent(v -> builder.withBoolean(entry.getName(), v));
-			}
-		}
-	}
-
 	private void buildValue(Record.Builder builder, String key, JsonValue value) {
 		if (value.getValueType() == ValueType.NULL) {
 			builder.withString(key, null);
